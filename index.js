@@ -20,14 +20,22 @@ function minutesToTimeString(minutes) {
 }
 
 function addTimes(time1, time2, breakDuration, overtime) {
-    const totalMinutes = timeToMinute(time1) + timeToMinute(time2) + parseInt(breakDuration) - parseInt(overtime);
+    let totalMinutes = timeToMinute(time1) + timeToMinute(time2);
+
+    if (breakDuration){
+        totalMinutes += parseInt(breakDuration)
+    }
+
+    if (overtime){
+        totalMinutes += parseInt(overtime)
+    }
+
     return minutesToTimeString(totalMinutes);
 }
 
 function updateEndTime()
 {
-    endTime.value = addTimes(startTime, workTime, breakDuration.value ?? 0, overtime.value ?? 0);
-    console.log(startTime.value)
+    endTime.value = addTimes(startTime, workTime, breakDuration.value, overtime.value);
 }
 
 endTime.value = addTimes(startTime, workTime, breakDuration.value, overtime.value);
