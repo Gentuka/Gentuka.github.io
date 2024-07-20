@@ -19,26 +19,25 @@ function minutesToTimeString(minutes) {
     return `${hoursStr}:${minsStr}`;
 }
 
-function addTimes(time1, time2, breakDuration, overtime) {
+function calcEndTime(time1, time2, breakDuration, overtime) {
     let totalMinutes = timeToMinute(time1) + timeToMinute(time2);
 
-    if (breakDuration){
+    if (breakDuration) {
         totalMinutes += parseInt(breakDuration)
     }
 
-    if (overtime){
-        totalMinutes += parseInt(overtime)
+    if (overtime) {
+        totalMinutes -= parseInt(overtime)
     }
 
     return minutesToTimeString(totalMinutes);
 }
 
-function updateEndTime()
-{
-    endTime.value = addTimes(startTime, workTime, breakDuration.value, overtime.value);
+function updateEndTime() {
+    endTime.value = calcEndTime(startTime, workTime, breakDuration.value, overtime.value);
 }
 
-endTime.value = addTimes(startTime, workTime, breakDuration.value, overtime.value);
+endTime.value = calcEndTime(startTime, workTime, breakDuration.value, overtime.value);
 startTime.addEventListener('input', updateEndTime);
 workTime.addEventListener('input', updateEndTime);
 breakDuration.addEventListener('input', updateEndTime);
