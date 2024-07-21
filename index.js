@@ -1,11 +1,24 @@
-let startTime = document.querySelector('#startTime');
-let workTime = document.querySelector('#worktime');
-let breakStart = document.querySelector('#breakStart');
-let breakEnd = document.querySelector('#breakEnd');
-let overtime = document.querySelector('#overtime');
-let endTime = document.querySelector('#endTime');
+const startTime = document.querySelector('#startTime');
+const workTime = document.querySelector('#worktime');
 
-let addBreak= document.querySelector('#add-break');
+const breakStart = document.querySelector('#breakStart0');
+const breakEnd = document.querySelector('#breakEnd0');
+
+const breakStart1 = document.querySelector('#breakStart1');
+const breakEnd1 = document.querySelector('#breakEnd1');
+
+const breakStart2 = document.querySelector('#breakStart2');
+const breakEnd2 = document.querySelector('#breakEnd2');
+
+const overtime = document.querySelector('#overtime');
+const endTime = document.querySelector('#endTime');
+
+const addBreak = document.querySelector('#add-break');
+
+const container1 = document.querySelector('#break-holder-1');
+const container2 = document.querySelector('#break-holder-2');
+const removeBreak1 = document.querySelector('#remove-break1');
+const removeBreak2 = document.querySelector('#remove-break2');
 
 // I HATE JAVASCRIPT
 
@@ -14,7 +27,7 @@ function timeToMinute(time) {
     return hours * 60 + minutes;
 }
 
-function minutesToTimeString(minutes) {
+function convertMinToHours(minutes) {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     const hoursStr = String(hours).padStart(2, '0');
@@ -22,18 +35,27 @@ function minutesToTimeString(minutes) {
     return `${hoursStr}:${minsStr}`;
 }
 
-function calcEndTime(time1, time2, breakDuration, overtime) {
-    let totalMinutes = timeToMinute(time1) + timeToMinute(time2);
+function calcEndTime() {
+    let totalMinutes = timeToMinute(startTime) + timeToMinute(workTime);
+    let breakDuration = calcBreakDuration(breakStart, breakEnd)
 
     if (breakDuration) {
         totalMinutes += parseInt(breakDuration)
     }
 
-    if (overtime) {
-        totalMinutes -= parseInt(overtime)
+    if (breakStart1.value && breakEnd1.value) {
+        totalMinutes += calcBreakDuration(breakStart1, breakEnd1)
     }
 
-    return minutesToTimeString(totalMinutes);
+    if (breakStart2.value && breakEnd2.value) {
+        totalMinutes += calcBreakDuration(breakStart2, breakEnd2)
+    }
+
+    if (overtime.value) {
+        totalMinutes -= parseInt(overtime.value)
+    }
+
+    return convertMinToHours(totalMinutes);
 }
 
 function calcBreakDuration(breakStart, breakEnd) {
@@ -41,37 +63,47 @@ function calcBreakDuration(breakStart, breakEnd) {
 }
 
 function updateEndTime() {
-    let breakDuration = calcBreakDuration(breakStart, breakEnd)
-    endTime.innerHTML= calcEndTime(startTime, workTime, breakDuration, overtime.value);
+    endTime.innerHTML = calcEndTime();
 }
 
-function addBreakElements() {
-    alert('in progress');
-    var breakStartDiv = document.createElement('div');
-    breakStartDiv.className = 'col form-group mb-4';
-    breakStartDiv.innerHTML = `
-                <label for="breakStart">Break Start*</label>
-                <input type="time" class="form-control" id="breakStart" name="worktime" value="12:00" required>
-            `;
-
-    var breakEndDiv = document.createElement('div');
-    breakEndDiv.className = 'col form-group mb-4';
-    breakEndDiv.innerHTML = `
-                <label for="breakEnd">Break End*</label>
-                <input type="time" class="form-control" id="breakEnd" name="worktime" value="12:30" required>
-            `;
-
-    var container = document.getElementById('break-holder');
-    container.appendChild(breakStartDiv);
-    container.appendChild(breakEndDiv);
+function addBreakInput() {
+    if (container1.style.display === '') {
+        container2.style.display = '';
+    } else {
+        container1.style.display = '';
+    }
 }
 
-addBreak.addEventListener('click', addBreakElements)
+function hideBreakInput1() {
+    container1.style.display = 'none';
+    breakStart1.value = '';
+    breakEnd1.value = '';
+    updateEndTime()
+}
 
-updateEndTime()
+function hideBreakInput2() {
+    container2.style.display = 'none';
+    breakStart2.value = '';
+    breakEnd2.value = '';
+    updateEndTime()
+}
+
+addBreak.addEventListener('click', addBreakInput)
+removeBreak1.addEventListener('click', hideBreakInput1)
+removeBreak2.addEventListener('click', hideBreakInput2)
+
 startTime.addEventListener('input', updateEndTime);
 workTime.addEventListener('input', updateEndTime);
+
 breakStart.addEventListener('input', updateEndTime);
 breakEnd.addEventListener('input', updateEndTime);
+
+breakStart1.addEventListener('input', updateEndTime);
+breakEnd1.addEventListener('input', updateEndTime);
+
+breakStart2.addEventListener('input', updateEndTime);
+breakEnd2.addEventListener('input', updateEndTime);
+
 overtime.addEventListener('input', updateEndTime);
 
+updateEndTime()
