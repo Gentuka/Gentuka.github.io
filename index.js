@@ -13,6 +13,7 @@ const breakEnd2 = document.querySelector('#breakEnd2');
 const overtime = document.querySelector('#overtime');
 const endTime = document.querySelector('#endTime');
 const countdown = document.querySelector('#countdown');
+const countdownLabel= document.querySelector('#countdown-label');
 
 const addBreak = document.querySelector('#add-break');
 
@@ -21,6 +22,7 @@ const container2 = document.querySelector('#break-holder-2');
 const removeBreak1 = document.querySelector('#remove-break1');
 const removeBreak2 = document.querySelector('#remove-break2');
 
+let totalMinutes;
 // I HATE JAVASCRIPT
 
 function timeToMinute(time) {
@@ -37,7 +39,7 @@ function convertMinToHours(minutes) {
 }
 
 function calcEndTime() {
-    let totalMinutes = timeToMinute(startTime) + timeToMinute(workTime);
+    totalMinutes = timeToMinute(startTime) + timeToMinute(workTime);
     let breakDuration = calcBreakDuration(breakStart, breakEnd)
 
     if (breakDuration) {
@@ -60,7 +62,7 @@ function calcEndTime() {
         totalMinutes = 0;
     }
 
-    timeoutForEndtime(totalMinutes);
+    timeoutForEndtime();
     return convertMinToHours(totalMinutes);
 }
 
@@ -94,17 +96,16 @@ function hideBreakInput2() {
     updateEndTime()
 }
 
-function timeoutForEndtime(minutes) {
+function timeoutForEndtime() {
     let currentTimeInMinutes = new Date().getHours() * 60 + new Date().getMinutes();
-    let diff = minutes - currentTimeInMinutes;
-
-    console.log(convertMinToHours(diff));
+    let diff = totalMinutes - currentTimeInMinutes;
 
     if (diff < 0){
         diff = 0;
     }
 
     countdown.innerHTML = convertMinToHours(diff)
+    setTimeout(timeoutForEndtime, 60000);
 }
 
 addBreak.addEventListener('click', addBreakInput)
