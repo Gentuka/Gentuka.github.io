@@ -12,6 +12,7 @@ const breakEnd2 = document.querySelector('#breakEnd2');
 
 const overtime = document.querySelector('#overtime');
 const endTime = document.querySelector('#endTime');
+const countdown = document.querySelector('#countdown');
 
 const addBreak = document.querySelector('#add-break');
 
@@ -55,6 +56,11 @@ function calcEndTime() {
         totalMinutes -= parseInt(overtime.value)
     }
 
+    if (totalMinutes < 0){
+        totalMinutes = 0;
+    }
+
+    timeoutForEndtime(totalMinutes);
     return convertMinToHours(totalMinutes);
 }
 
@@ -86,6 +92,19 @@ function hideBreakInput2() {
     breakStart2.value = '';
     breakEnd2.value = '';
     updateEndTime()
+}
+
+function timeoutForEndtime(minutes) {
+    let currentTimeInMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+    let diff = minutes - currentTimeInMinutes;
+
+    console.log(convertMinToHours(diff));
+
+    if (diff < 0){
+        diff = 0;
+    }
+
+    countdown.innerHTML = convertMinToHours(diff)
 }
 
 addBreak.addEventListener('click', addBreakInput)
