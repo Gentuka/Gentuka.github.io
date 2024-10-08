@@ -72,6 +72,9 @@ function calcBreakDuration(breakStart, breakEnd) {
 
 function updateEndTime() {
     endTime.innerHTML = calcEndTime();
+
+    document.cookie = "start=abc; path=/";
+    console.log(document.cookie);
 }
 
 function addBreakInput() {
