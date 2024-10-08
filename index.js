@@ -1,46 +1,45 @@
-const startTime = document.querySelector('#startTime');
-const workTime = document.querySelector('#worktime');
+const startTime = document.querySelector("#startTime");
+const workTime = document.querySelector("#worktime");
 
-const breakStart = document.querySelector('#breakStart0');
-const breakEnd = document.querySelector('#breakEnd0');
+const breakStart = document.querySelector("#breakStart0");
+const breakEnd = document.querySelector("#breakEnd0");
 
-const breakStart1 = document.querySelector('#breakStart1');
-const breakEnd1 = document.querySelector('#breakEnd1');
+const breakStart1 = document.querySelector("#breakStart1");
+const breakEnd1 = document.querySelector("#breakEnd1");
 
-const breakStart2 = document.querySelector('#breakStart2');
-const breakEnd2 = document.querySelector('#breakEnd2');
+const breakStart2 = document.querySelector("#breakStart2");
+const breakEnd2 = document.querySelector("#breakEnd2");
 
-const overtime = document.querySelector('#overtime');
-const endTime = document.querySelector('#endTime');
-const countdown = document.querySelector('#countdown');
-const countdownLabel= document.querySelector('#countdown-label');
+const overtime = document.querySelector("#overtime");
+const endTime = document.querySelector("#endTime");
+const countdown = document.querySelector("#countdown");
 
-const addBreak = document.querySelector('#add-break');
+const addBreak = document.querySelector("#add-break");
 
-const container1 = document.querySelector('#break-holder-1');
-const container2 = document.querySelector('#break-holder-2');
-const removeBreak1 = document.querySelector('#remove-break1');
-const removeBreak2 = document.querySelector('#remove-break2');
+const container1 = document.querySelector("#break-holder-1");
+const container2 = document.querySelector("#break-holder-2");
+const removeBreak1 = document.querySelector("#remove-break1");
+const removeBreak2 = document.querySelector("#remove-break2");
 
 let totalMinutes;
 // I HATE JAVASCRIPT
 
 function timeToMinute(time) {
-    const [hours, minutes] = time.value.split(':').map(Number)
+    const [hours, minutes] = time.split(":").map(Number)
     return hours * 60 + minutes;
 }
 
 function convertMinToHours(minutes) {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    const hoursStr = String(hours).padStart(2, '0');
-    const minsStr = String(mins).padStart(2, '0');
+    const hoursStr = String(hours).padStart(2, "0");
+    const minsStr = String(mins).padStart(2, "0");
     return `${hoursStr}:${minsStr}`;
 }
 
 function calcEndTime() {
-    totalMinutes = timeToMinute(startTime) + timeToMinute(workTime);
-    let breakDuration = calcBreakDuration(breakStart, breakEnd)
+    totalMinutes = timeToMinute(getCookie("startTime") || "08:00") + timeToMinute(getCookie("workTime") || "07:42");
+    let breakDuration = calcBreakDuration()
 
     if (breakDuration) {
         totalMinutes += parseInt(breakDuration)
@@ -62,40 +61,42 @@ function calcEndTime() {
         totalMinutes = 0;
     }
 
+    setCookie("startTime", startTime.value, 365);
+    setCookie("workTime", workTime.value, 365);
+    setCookie("breakStart", breakStart.value, 365);
+    setCookie("breakEnd", breakEnd.value, 365);
+
     timeoutForEndtime();
     return convertMinToHours(totalMinutes);
 }
 
-function calcBreakDuration(breakStart, breakEnd) {
-    return timeToMinute(breakEnd) - timeToMinute(breakStart)
+function calcBreakDuration() {
+    return timeToMinute(getCookie("breakEnd") || "12:30") - timeToMinute(getCookie("breakStart") || "12:00");
 }
 
 function updateEndTime() {
     endTime.innerHTML = calcEndTime();
-
-    document.cookie = "start=abc; path=/";
-    console.log(document.cookie);
 }
 
 function addBreakInput() {
-    if (container1.style.display === '') {
-        container2.style.display = '';
+    if (container1.style.display === "") {
+        container2.style.display = "";
     } else {
-        container1.style.display = '';
+        container1.style.display = "";
     }
 }
 
 function hideBreakInput1() {
-    container1.style.display = 'none';
-    breakStart1.value = '';
-    breakEnd1.value = '';
+    container1.style.display = "none";
+    breakStart1.value = "";
+    breakEnd1.value = "";
     updateEndTime()
 }
 
 function hideBreakInput2() {
-    container2.style.display = 'none';
-    breakStart2.value = '';
-    breakEnd2.value = '';
+    container2.style.display = "none";
+    breakStart2.value = "";
+    breakEnd2.value = "";
     updateEndTime()
 }
 
@@ -111,22 +112,48 @@ function timeoutForEndtime() {
     setTimeout(timeoutForEndtime, 60000);
 }
 
-addBreak.addEventListener('click', addBreakInput)
-removeBreak1.addEventListener('click', hideBreakInput1)
-removeBreak2.addEventListener('click', hideBreakInput2)
+function setCookie(name, value, days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    let expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + ";path=/";}
 
-startTime.addEventListener('input', updateEndTime);
-workTime.addEventListener('input', updateEndTime);
+function getCookie(name) {
+    let decodedCookie = decodeURIComponent(document.cookie)
+    let cookieArr = decodedCookie.split("; ");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (cookiePair[0] === name) {
+            return cookiePair[1];
+        }
+    }
+    return null;
+}
 
-breakStart.addEventListener('input', updateEndTime);
-breakEnd.addEventListener('input', updateEndTime);
+function fillInputWithCookieValue() {
+    startTime.value = getCookie("startTime") || "08:00";
+    workTime.value =  getCookie("workTime") || "07:42";
+    breakStart.value =  getCookie("breakStart") || "12:00";
+    breakEnd.value =  getCookie("breakEnd") || "12:30";
+}
 
-breakStart1.addEventListener('input', updateEndTime);
-breakEnd1.addEventListener('input', updateEndTime);
+addBreak.addEventListener("click", addBreakInput)
+removeBreak1.addEventListener("click", hideBreakInput1)
+removeBreak2.addEventListener("click", hideBreakInput2)
 
-breakStart2.addEventListener('input', updateEndTime);
-breakEnd2.addEventListener('input', updateEndTime);
+startTime.addEventListener("input", updateEndTime);
+workTime.addEventListener("input", updateEndTime);
 
-overtime.addEventListener('input', updateEndTime);
+breakStart.addEventListener("input", updateEndTime);
+breakEnd.addEventListener("input", updateEndTime);
 
-updateEndTime()
+breakStart1.addEventListener("input", updateEndTime);
+breakEnd1.addEventListener("input", updateEndTime);
+
+breakStart2.addEventListener("input", updateEndTime);
+breakEnd2.addEventListener("input", updateEndTime);
+
+overtime.addEventListener("input", updateEndTime);
+
+fillInputWithCookieValue()
+updateEndTime();
