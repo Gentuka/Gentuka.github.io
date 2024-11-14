@@ -22,7 +22,6 @@ const removeBreak1 = document.querySelector("#remove-break1");
 const removeBreak2 = document.querySelector("#remove-break2");
 
 let totalMinutes;
-// I HATE JAVASCRIPT
 
 function timeToMinute(time) {
     const [hours, minutes] = time.split(":").map(Number)
@@ -38,7 +37,8 @@ function convertMinToHours(minutes) {
 }
 
 function calcEndTime() {
-    totalMinutes = timeToMinute(getCookie("startTime") || "08:00") + timeToMinute(getCookie("workTime") || "07:42");
+    totalMinutes = timeToMinute(startTime.value) + timeToMinute(workTime.value);
+
     let breakDuration = calcBreakDuration()
 
     if (breakDuration) {
@@ -137,6 +137,15 @@ function fillInputWithCookieValue() {
     breakEnd.value =  getCookie("breakEnd") || "12:30";
 }
 
+function debug() {
+    console.log('### START DEBUG ###');
+    console.log(startTime.value);
+    console.log(workTime.value);
+    console.log(breakStart.value);
+    console.log(breakEnd.value);
+    console.log('### END DEBUG ###');
+}
+
 addBreak.addEventListener("click", addBreakInput)
 removeBreak1.addEventListener("click", hideBreakInput1)
 removeBreak2.addEventListener("click", hideBreakInput2)
@@ -155,5 +164,5 @@ breakEnd2.addEventListener("input", updateEndTime);
 
 overtime.addEventListener("input", updateEndTime);
 
-fillInputWithCookieValue()
+fillInputWithCookieValue();
 updateEndTime();
