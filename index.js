@@ -1,3 +1,5 @@
+const themeButton = document.querySelector("#theme")
+
 const startTime = document.querySelector("#startTime");
 const workTime = document.querySelector("#worktime");
 
@@ -137,6 +139,27 @@ function fillInputWithCookieValue() {
     breakEnd.value =  getCookie("breakEnd") || "12:30";
 }
 
+function toggleThemeMode() {
+    const html = document.getElementById("html");
+    const mode = getCookie("theme")
+
+    if (!mode) {
+        setCookie("theme", "dark", 365)
+    }
+
+    if (mode === "dark") {
+        html.setAttribute("data-bs-theme", "light")
+        setCookie("theme", "light", 365)
+    } else {
+        html.setAttribute("data-bs-theme", "dark")
+        setCookie("theme", "dark", 365)
+    }
+}
+
+function setTheme() {
+    html.setAttribute("data-bs-theme", getCookie("theme"));
+}
+
 function debug() {
     console.log('### START DEBUG ###');
     console.log(startTime.value);
@@ -146,9 +169,11 @@ function debug() {
     console.log('### END DEBUG ###');
 }
 
-addBreak.addEventListener("click", addBreakInput)
-removeBreak1.addEventListener("click", hideBreakInput1)
-removeBreak2.addEventListener("click", hideBreakInput2)
+themeButton.addEventListener("click", toggleThemeMode);
+
+addBreak.addEventListener("click", addBreakInput);
+removeBreak1.addEventListener("click", hideBreakInput1);
+removeBreak2.addEventListener("click", hideBreakInput2);
 
 startTime.addEventListener("input", updateEndTime);
 workTime.addEventListener("input", updateEndTime);
@@ -164,5 +189,6 @@ breakEnd2.addEventListener("input", updateEndTime);
 
 overtime.addEventListener("input", updateEndTime);
 
+setTheme();
 fillInputWithCookieValue();
 updateEndTime();
