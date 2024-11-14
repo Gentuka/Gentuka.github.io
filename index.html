@@ -14,12 +14,12 @@
     <div>
         <div class="row">
             <div class="col form-group mb-4">
-                <button class="btn btn-primary" id="theme">Theme</button>
+                <button class="btn btn-primary" id="theme" title="Toggle Light/Dark Theme">Theme</button>
             </div>
         </div>
 
         <!--START TIME-->
-        <div class="row">
+        <div class="row" title="Add Your Start Working Time">
             <div class="col form-group mb-4">
                 <label for="startTime">Start Time*</label>
                 <input type="time" class="form-control" id="startTime">
@@ -27,7 +27,7 @@
         </div>
 
         <!--WORK DURATION-->
-        <div class="row">
+        <div class="row" title="Add Your Working Time Of The day">
             <div class="col form-group mb-4">
                 <label for="worktime">Work Duration*</label>
                 <input type="time" class="form-control" id="worktime">
@@ -35,7 +35,7 @@
         </div>
 
         <!--BREAK 0-->
-        <div class="row">
+        <div class="row" title="Add Your Break">
             <div class="col form-group mb-4">
                 <label for="breakStart0">Break Start*</label>
                 <input type="time" class="form-control" id="breakStart0">
@@ -44,40 +44,40 @@
                 <label for="breakEnd0">Break End*</label>
                 <input type="time" class="form-control" id="breakEnd0">
             </div>
-            <div class="col">
+            <div class="col" title="Add Another Break">
                 <span>Action</span>
                 <span id="add-break" class="d-block btn btn-secondary">+</span>
             </div>
         </div>
 
         <!--BREAK 1-->
-        <div id="break-holder-1" class="row" style="display: none;">
+        <div id="break-holder-1" class="row" style="display: none;" title="Another Break">
             <div class="col form-group mb-4">
                 <input type="time" class="form-control" id="breakStart1" value="">
             </div>
             <div class="col form-group mb-4">
                 <input type="time" class="form-control" id="breakEnd1" value="">
             </div>
-            <div class="col">
+            <div class="col" title="Close Break">
                 <span id="remove-break1" class="d-block btn btn-danger">x</span>
             </div>
         </div>
 
         <!--BREAK 2-->
-        <div id="break-holder-2" class="row" style="display: none;">
+        <div id="break-holder-2" class="row" style="display: none;" title="Another Break">
             <div class="col form-group mb-4">
                 <input type="time" class="form-control" id="breakStart2" value="">
             </div>
             <div class="col form-group mb-4">
                 <input type="time" class="form-control" id="breakEnd2" value="">
             </div>
-            <div class="col">
+            <div class="col" title="Close Break">
                 <span id="remove-break2" class="d-block btn btn-danger">x</span>
             </div>
         </div>
 
         <!--OVERTIME-->
-        <div class="row">
+        <div class="row" title="You Can Use Your Collected Overtime here">
             <div class="col form-group mb-4">
                 <label for="overtime">Use Collected Overtime (min)</label>
                 <input type="number" class="form-control" id="overtime" min="0">
@@ -87,11 +87,11 @@
 
         <!--ENDTIME + Countdown-->
         <div class="row">
-            <div class="col form-group mb-4">
+            <div class="col form-group mb-4" title="This is your Current Expected End Time. This will change If you change Start Time, Work Duration and Breaks">
                 <label for="endTime">Expected End Time</label>
                 <span class="d-block fs-1 text-success" id="endTime">--:--</span>
             </div>
-            <div class="col form-group mb-4">
+            <div class="col form-group mb-4" title="You Work is done in XX:XX">
                 <label for="countdown">Finish In</label>
                 <span class="d-block fs-1 text-success" id="countdown">--:--</span>
             </div>
